@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title class="theme-next mist use-motion">My Blogs</title>
+    <style>
+
+        html
+        {
+          font-family: sans-serif; /* 1 */
+          -ms-text-size-adjust: 100%; /* 2 */
+          -webkit-text-size-adjust: 100%; /* 2 */
+        }
+
+
+        /*边缘为0 */
+
+        body{
+            margin: 0;
+        }
+
+
+        .container {
+          position: relative;
+          min-height: 100%;
+        }
+
+        .header{
+          background-color: #f4f4f4;
+        }
+
+        .header-inner {
+          margin: 0 auto;
+          width: 850px;
+
+        }
+
+        .header-inner {
+          padding: 25px 0 20px;
+        }
+        .header-inner:before,
+        .header-inner:after {
+          content: " ";
+          display: table;
+        }
+        .header-inner:after {
+          clear: both;
+        }
+
+        .menu {
+          margin-top: 20px;
+          padding: 0;
+          text-align: center;
+        }
+
+
+        .menu br {
+          display: none;
+        }
+
+        .menu .menu-item {
+          display: inline-block;
+          margin: 0 10px;
+        }
+
+
+        .menu a {
+          display: block;
+          width: 60px;
+          height: 20px;
+          font-size: 13px;
+          text-transform: capitalize;
+          line-height: inherit;
+          transition-duration: 0.2s;
+          transition-timing-function: ease-in-out;
+          transition-delay: 0s;
+          text-decoration: none;
+          /*padding: 0 3px; */
+          background: none;
+          border: none;
+          border-radius: 3px;  /*边缘半径,背景圆角*/
+          transition-property: background;
+
+          padding-top: 11px;
+        }
+
+
+        /*添加标签小图标 */
+        .menu .menu-item-search .popup-trigger i{
+            background: url(searchicon.png) no-repeat left center;
+        }
+        /*添加导航背景*/
+        .menu .menu-item a:hover {
+          background: #e1e1e1;
+          text-align: inherit;
+        }
+        .menu a::before {
+          display: none;
+        }
+        /*导航-图标与字体之间间距*/
+        .menu .menu-item-icon {
+          margin-right: 5px;
+        }
+
+
+        .site-meta {
+          float: left;
+          margin-left: 10px;
+          line-height: normal;
+        }
+
+        .site-meta .brand {
+          padding: 2px 1px;
+          background: none;
+            display: block;
+        }
+
+        .site-meta .logo {
+          display: none;
+        }
+        .site-meta .site-title {
+          font-size: 20px;
+          font-weight: bolder;
+          margin: 16px;
+        }
+
+        .logo-line-before,
+        .logo-line-after {
+          display: none;
+          overflow: hidden;
+          margin: 0 auto;
+          width: 75%;
+        }
+
+        .logo-line-before i,
+        .logo-line-after i {
+          position: relative;
+          display: none;
+          height: 3px;
+          background: #222;
+        }
+
+        .logo-line-before i {
+          left: -100%;
+        }
+        .logo-line-after i {
+          right: -100%;
+        }
+
+        .site-title {
+          display: inline-block;
+          vertical-align: middle;
+          font-size: 20px;
+          font-weight: normal;
+          font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+
+        }
+
+        .brand {
+          opacity: 0;
+        }
+
+
+        .site-nav{
+            display: block;
+            float: right;
+        }
+
+        .content{
+            padding:5px 260px;
+        }
+        .content .title {
+            padding-top:10px;
+        }
+        .content .info span {
+            padding-right: 10px;
+
+        }
+        .content .summary {
+            padding-top:10px;
+        }
+
+        p.tac
+        {
+             position: relative;
+             color: black;
+             text-decoration: none;
+             font-size: 15px;
+             font-family: "Lucida Handwriting";
+        }
+
+        a.btn
+        {
+            position: relative;
+             color: black;
+             text-decoration: none;
+             font-size: 15px;
+             font-family: "Lucida Handwriting";
+        }
+        a.ta
+        {
+             position: relative;
+             color: black;
+             text-decoration: none;
+             font-size: 22px;
+             font-family: "Apple Color Emoji";
+        }
+        a.ta:hover
+        {
+              color: black;
+        }
+        a.ta:before
+        {
+              content: "";
+              position: absolute;
+              width: 100%;
+              height: 2px;
+              bottom: -5px;
+              left: 0;
+              background-color: #363636;
+              visibility: hidden;
+              -webkit-transform: scaleX(0);
+              transform: scaleX(0);
+              -webkit-transition: all 0.3s ease-in-out 0s;
+              -o-transition: all 0.3s ease-in-out 0s;
+              transition: all 0.3s ease-in-out 0s;
+        }
+        a.ta:hover:before
+        {
+              visibility: visible;
+              -webkit-transform: scaleX(1);
+              -o-transform: scaleX(1);
+              transform: scaleX(1);
+        }
+        /* 页脚*/
+        .footer {
+          position: inherit;
+          width: 100%;
+          min-height: 50px;
+          background-color: #f4f4f4;
+        }
+        .footer-inner{
+            margin: 0 auto;
+          padding: 20px 0 30px;
+          width: 700px;
+          background-color: transparent;
+        }
+        .post-more-link {
+         margin-top: 1px;
+        }
+        .text-center {
+         text-align: center;
+        }
+
+        .post-eof {
+        display: block;
+        margin: 20px auto;
+        width: 100%;
+        height: 1px;
+        background: #ccc;
+        text-align: center;
+        }
+
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <div class="headband"></div>
+        <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+              <div class="header-inner">
+                <div class="site-meta">
+                    <div class="custom-logo-site-title">
+                        <a class="brand" rel="start" style="opacity: 1;">
+                            <span class="logo-line-before">
+                                <i class="logo" style="transform: translateX(100%);"></i>
+                            </span>
+                            <span class="site-title" style="opacity: 1; top: 0;">Lpshen.li</span>
+                            <span class="logo-line-after">
+                                <i class="logo" style="transform: translateX(-100%);"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <nav class="site-nav">
+                    <ul id="menu" class="menu">
+                        <li class="menu-item menu-item-home menu-item-active" style="opacity: 1; transform: translateY(0px);">
+                         <a href="/" rel="section">
+                         <i class="menu-item-icon fa fa-fw">s</i> <br>
+                            首页
+                         </a>
+                        </li>
+                        <li class="menu-item menu-item-categories" style="opacity: 1; transform: translateY(0px);">
+                          <a href="/categories" rel="section">
+                              <i class="menu-item-icon fa fa-fw fa-th">f</i> <br>
+                            分类
+                          </a>
+                        </li>
+                        <li class="menu-item menu-item-archives" style="opacity: 1; transform: translateY(0px);">
+                          <a href="/archives" rel="section">
+                              <i class="menu-item-icon fa fa-fw fa-archive">g</i> <br>
+                            归档
+                          </a>
+                        </li>
+                        <li class="menu-item menu-item-tags" style="opacity: 1; transform: translateY(0px);">
+                           <a href="/tags" rel="section">
+                              <i class="menu-item-icon fa fa-fw fa-tags">b</i> <br>
+                            标签
+                          </a>
+                        </li>
+                        <li class="menu-item menu-item-search" style="opacity: 1; transform: translateY(0px);">
+                            <a href="#" class="popup-trigger">
+                              <i class="menu-item-icon fa fa-search fa-fw">d</i> <br>
+                            搜索
+                          </a>
+                        </li>
+                    </ul>
+                </nav>
+              </div>
+
+        </header>
+        <main id="main" class="main">
+          <div class="main-inner">
+            {% for blog in blogs %}
+                <div id="content" class="content">
+                    <div id="uline" class="title">
+                        <a class="ta" href="{% url 'blog_get_detail' blog.id %}">
+                            {{ blog.title }}
+                        </a>
+                    </div><br>
+                    <div class="info">
+                        <span class="created" style="color: #707070;">{{ blog.created |date:"Y-m-d H:i" }}</span>
+                        <span class="catagory" style="color: #707070;">{{ blog.catagory.name }}</span>
+                        <span class="author" style="color: #707070;">{{ blog.author }}</span>
+                    </div>
+                    <div class="summary">
+                        <p class="tac">
+                            {{ blog.content | truncatechars:500 }}
+                            <br>
+                        </p>
+                    </div>
+                    <div class="post-more-link text-center">
+                        <a class="btn" href="/" rel="contents">阅读全文 »
+                        </a>
+                    </div>
+                    <footer class="post-footer">
+                        <div class="post-eof"></div>
+                    </footer>
+                </div>
+            {% endfor %}
+          </div>
+        </main>
+        <footer id="footer" class="footer">
+            <div class="footer-inner">
+                    <span>©由lpshen.li开发 | QQ:9807681</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

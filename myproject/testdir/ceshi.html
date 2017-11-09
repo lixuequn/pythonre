@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>站内搜索</title>
+<script type="text/javascript" src="/Users/lixuequn/prodel/site/lixuequn.github.io/node_modules/jquery/dist/jquery.js">
+</script>
+<div class="header-inner"><div class="site-meta ">
+
+<li class="menu-item menu-item-search">
+    <a href="#" class="popup-trigger">
+       <i class="menu-item-icon fa fa-search fa-fw"></i> <br/>搜索
+    </a>
+ </li>
+<div class="site-search">
+ <div class="popup">
+  <span class="search-icon fa fa-search">span</span>
+  <input type="text" id="local-search-input">
+  <div id="local-search-result"><p>查询结果：</p></div>
+ <span class="popup-btn-close">关闭搜索</span>
+ </div>
+</div>
+
+<script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "//Users//lixuequn//Desktop//search.xml";
+    if (search_path.length == 0) {
+       search_path = "//Users//lixuequn//Desktop//search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+    	//append()在被选元素的结尾追加内容.css()设置隐藏溢出属性。
+      $("body").append('<div class="popoverlay">').css('overflow','hidden');
+        //toggle切换隐藏显示。
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    //ajax()方法完成异步http请求，获得xml数据。
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        //xmlResponse 为获得的结果
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            //移动popup到header-inner元素位置。
+            $('.popup').detach().appendTo('.header-inner');
+         /*map()方法遍历获取的数据，以title,content,url三种形式分类显示。map()返回的值是
+         jQuery 封装的数组(需要输出这个返回值查看)，再用get()来处理返回的对象以得到基础的数组.
+         */
+            var datas = $( "entry", xmlResponse ).map(function()
+            {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+       //document.getElementById()返回的是dom对象，用$转化为jquery对象。可以互相转换。
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+           //给输入框绑定监听事件－addEventListener()
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                //trim 对this进行去除空字符处理,toLowerCase()大写转化为小写字符串,
+                //正则表达式，\s是匹配所有空白字符
+                // split() 把一个字符串分割成一个字符串数组
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1)
+                {
+                // perform local searching
+                datas.forEach(function(data)
+                {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '')
+                    {
+                        keywords.forEach(function(keyword, i)
+                        {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 )
+                            {
+                                isMatch = false;
+                            }
+                            else
+                            {
+                                if (index_content < 0)
+                                {
+                                    index_content = 0;
+                                }
+                                if (i == 0)
+                                {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0)
+                            {
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword)
+                            {
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e)
+    {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      }
+      else
+      {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e)
+    {
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e)
+    {
+      e.stopPropagation();
+    });
+  </script>
+
+
+</head>
+<body>
+<p>站内搜索</p>
+</body>
+</html>
